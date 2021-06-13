@@ -2,7 +2,11 @@
 
 本项目是对 [Aparapi](https://aparapi.com/) 项目官方文档的 **自用** 简中翻译, 不保证翻译质量.
 
-> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="知识共享许可协议" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br />本作品采用<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>进行许可
+> 本项目使用 [DeepL](https://www.deepl.com/translator) 辅助翻译
+> ![](https://www.deepl.com/img/logo/deepl-logo-blue.svg) **DeepL**
+
+> [ ![](https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png) ](http://creativecommons.org/licenses/by-nc-sa/4.0/)
+> 本作品采用[知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议](http://creativecommons.org/licenses/by-nc-sa/4.0/)进行许可
 > 
 > [知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议 (中文)](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)
 > 如果您需要在您的项目中使用本项目内容, 请遵循上述协议
@@ -24,10 +28,10 @@
 [Aparapi Patterns](https://aparapi.com/documentation/aparapi-patterns.html)|[Aparapi 示例](aparapi-patterns.md)|✅
 [Choosing Specific Devices](https://aparapi.com/documentation/choosing-specific-devices.html)|[指定设备](aparapi-choosing-specific-devices.md)|✅
 [Converting Java to OpenCL](https://aparapi.com/documentation/converting-java-to-opencl.html)|[Java 和 OpenCL 之间的转换](aparapi-converting-java-to-opencl.md)|⏯
-[Emulating Multiple Entrypoints](https://aparapi.com/documentation/emulating-multiple-entrypoints.html)||🕒
-[Explicit Buffer Handling](https://aparapi.com/documentation/explicit-buffer-handling.html)||🕒
+[Emulating Multiple Entrypoints](https://aparapi.com/documentation/emulating-multiple-entrypoints.html)|[模拟多入口](aparapi-emulating-multiple-entrypoints.md)|✅
+[Explicit Buffer Handling](https://aparapi.com/documentation/explicit-buffer-handling.html)|[显式处理缓冲区](aparapi-explicit-buffer-handling.md)|▶
 [HSA Enabled Lambda](https://aparapi.com/documentation/hsa-enabled-lambda.html)||🕒
-[Kernel Guidelines](https://aparapi.com/documentation/kernel-guidelines.html)|内核编程指导|🕒
+[Kernel Guidelines](https://aparapi.com/documentation/kernel-guidelines.html)|内核编程指南|🕒
 [Library Agent Duality](https://aparapi.com/documentation/library-agent-duality.html)||🕒
 [New Features](https://aparapi.com/documentation/new-features.html)|新特性|🕒
 [OpenCL Bindings](https://aparapi.com/documentation/opencl-bindings.html)||🕒
