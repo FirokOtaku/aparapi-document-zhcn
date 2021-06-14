@@ -1,4 +1,4 @@
-# 显式处理缓冲区
+# 手动管理缓冲区
 
 > **如何最优化缓冲区数据交换**
 
@@ -66,13 +66,13 @@ while (done[0] ==0)){
 }
 ```
 
-This is a common pattern in reduce stages of map-reduce type problems. Essentially the developer wants to keep executing a kernel until some condition is met. For example, this may be seen in bitonic sort implementations and various financial applications.
+这种模式在 map-reduce ([map-reduce - Wikipedia][map-reduce-en],[map-reduce - Wikipedia(中文)][map-reduce-zhcn]) 编程模型中的 reduce 阶段很常见. 这本质上是开发者希望内核在满足某些条件时能停止执行, 比如在 *双调排序* ([bitonic-sorter - Wikipedia][bitonic sorter-en]) 和各类金融运算时. 
 
-From the code it can be seen that the kernel reads and writes hugeArray[] array and uses the single item done[] array to indicate some form of convergence or completion.
+从上面的代码能看到, 内核从 `hugeArray[]` 读取数据然后把结果存到单元素数组 `done[]` 中.
 
-As we demonstrated above, by default Aparapi will transfer done[] and hugeArray[] to and from the GPU device each time Kernel.execute(HUGE) is executed.
+默认情况下, Aparapi 会在每次 `Kernel.execute(HUGE)` 之前将 `done[]` 和 `hugeArray[]` 传输到 GPU 上.
 
-To demonstrate which buffers are being transfered, these copies are shown as comments in the following version of the code.
+在下面的代码中用注释来指明传输了哪些缓冲区.
 
 ```java
 final int[] hugeArray = new int[HUGE];
@@ -90,17 +90,17 @@ while (done[0] ==0)){
 }
 ```
 
-Further analysis of the code reveals that hugeArray[] is not accessed by the loop containing the kernel execution, so Aparapi is performing 999 unnecessary transfers to the device and 999 unnecessary transfers back. Only two transfers of hugeArray[] are needed; one to move the initial data to the GPU and one to move it back after the loop terminates.
+对代码进一步分析表明, `hugeArray[]` 没有被内核内部循环使用, 所以这个数组被不必要地向 GPU 传输了999次, 又被不必要地传输回主机999次. 但是只有2次是有效的: 一次是在循环开始之前将数据传输到 GPU, 另一次是在循环结束之后将数据传输回主机.
 
-The done[] array is accessed during each iteration (although never written to within the loop), so it does need to be transferred back for each return from Kernel.execute(), however, it only needs to be sent once.
+`done[]` 在每次迭代时都会被调用 (虽然循环中从来没有对其进行过写入); 它确实需要在每次 `Kernel.execute()` 执行结束后传输回来, 但是1次足矣.
 
-Clearly it is better to avoid unnecessary transfers, especially of large buffers like hugeArray[].
+显然, 应该避免不必要的数据传输, 特别是类似于 `hugeArray[]` 这样的大缓冲区数据.
 
-Aparapi exposes a feature which allows the developer to control these situations and explicitly manage transfers.
+Aparapi 提供了一个功能, 允许开发者对上述情况进行优化, 手动控制数据传输.
 
-To use this feature first the developer needs to ‘turn on’ explicit mode, using the kernel.setExplicit(true) method. Then the developer can request buffer/array transfers using either kernel.put() or kernel.get(). Kernel.put() forces a transfer to the GPU device and Kernel.get() transfers data back.
+要使用这个功能, 开发者首先需要调用 `kernel.setExplicit(true)` 启用手动数据传输, 然后使用 `kernel.put()` 或 `kernel.get()` 在主机和 GPU 之间进行数据传输.
 
-The following code illustrates the use of these new explicit buffer management APIs.
+下面的代码演示应如何使用上述接口:
 
 ```java
 final int[] hugeArray = new int[HUGE];
@@ -119,9 +119,9 @@ while (done[0] ==0)){
 kernel.get(hugeArray);
 ```
 
-Note that marking a kernel as explicit and failing to request the appropriate transfer is a programmer error.
+需要注意的是, 开启一个内核的手动数据传输控制功能却没有进行适当的数据传输是开发者的责任.
 
-We deliberately made Kernel.put(...), Kernel.get(...) and Kernel.execute(range) return an instance of the executing kernel to allow these calls be chained. Some may find this fluent style API more expressive.
+我们故意让 `Kernel.put(...)`, `Kernel.get(...)` 和 `Kernel.execute(range)` 方法返回内核实例方便进行链式调用. 链式编程模式代码在某些情况下更具表现力.
 
 ```java
 final int[] hugeArray = new int[HUGE];
@@ -138,9 +138,9 @@ while (done[0] ==0)){
 kernel.get(hugeArray);
 ```
 
-An alternate approach for loops containing a single kernel.execute(range) call. One variant of code which would normally suggest the use of Explicit Buffer Management can be handled differently. For cases where Kernel.execute(range) is the sole statement inside a loop and where the iteration count is known prior to the first iteration we offer an alternate (hopefully more elegant) way of minimizing buffer transfers.
+另外, 对于 `Kernel.execute(range)` 是循环体内的唯一语句且迭代次数是已知的情况, 我们提供了另一种 (理论上更优雅) 方式来优化缓冲区传输.
 
-So for cases like:-
+所以对于下面这种情况:
 
 ```java
 final int[] hugeArray = new int[HUGE];
@@ -153,9 +153,9 @@ for (int pass=0; pass<1000; pass++){
 }
 ```
 
-The developer can request that Aparapi perform the outer loop rather than coding the loop. This is achieved explicitly by passing the iteration count as the second argument to Kernel.execute(range, iterations).
+开发者可以将迭代次数作为第二形参调用 `Kernel.execute(range, iterations)` 来要求 Aparapi 进行外层循环, 而不是手动编写循环.
 
-Now any form of code that looks like :-
+所以像下面这样的代码:
 
 ```java
 int range = 1024;
@@ -165,7 +165,7 @@ for (int passId = 0; passId < loopCount; passId++){
 }
 ```
 
-Can be replaced with
+可以改为下面这样:
 
 ```java
 int range = 1024;
@@ -174,11 +174,9 @@ int loopCount = 64;
 kernel.execute(range, loopCount);
 ```
 
-Not only does this make the code more compact and avoids the use of explicit buffer management APIs, it allows Aparapi visibility to the complete loop so that Aparapi can minimize the number of transfers. Aparapi will only transfer buffers to the GPU once and transfer them back once, resulting in improved performance.
+这不仅让代码更紧凑, 避免了手动管理缓冲区, 还让 Aparapi 对外部循环本身有可见性, 从而最优化数据传输. 现在 Aparapi 只会将缓冲区传输到 GPU 1次, 再传输回1次, 从而提升性能.
 
-Sometimes kernel code using this loop-pattern needs to track the current iteration number as the code passed through the outer loop. Previously we would be forced to use explicit buffer management to allow the kernel to do this.
-
-The code for this would have looked something like
+有时这种模式的代码需要在外部循环中追踪当前正在进行迭代的迭代次数号, 在以前我们只能用手动缓冲区管理来实现:
 
 ```java
 int range = 1024;
@@ -202,9 +200,9 @@ for (passId[0]=0; passId[0]<loopCount; passId[0]++){
 }
 ```
 
-In the current version of Aparapi we added Kernel.getPassId() to allow a Kernel to determine the current ‘pass’ through the outer loop without having to use explicit buffer management.
+当前 Aparapi 提供了 `Kernel.getPassId()` 接口, 允许内核不需要使用手动缓冲区管理就能获取当前是第几次外部循环执行过程.
 
-So the previous code can now be written without any explicit buffer management APIs:-
+所以之前的代码可以像下面这样写:
 
 ```java
 final int[] hugeArray = new int[HUGE];
@@ -223,9 +221,13 @@ Kernel kernel = new Kernel(){
 kernel.execute(HUGE, 1000);
 ```
 
-One common use for Kernel.getPassId() is to avoid flipping buffers in the outer loop.
+`Kernel.getPassId()` 的一个常见用途是避免在外部循环中翻转缓冲区.
 
-It is common for kernels to process data from one buffer to another, and in the next invocation process the data back the other way. Now these kernels can use the passId (odd or even) to determine the direction of data transfer.
+我们经常会需要使内核将一个缓冲区内的数据转移到另一个缓冲区, 下一次调用时再用另一种形式返回. 现在我们可以用 `passId` 的奇偶性来控制数据传输的方向.
+
+> 译注:  
+> 其实就是 `passId` 也能当作一个参数呗,  
+> 毕竟一个整型能存32位数据
 
 ```java
 final int[] arr1 = new int[HUGE];
@@ -247,3 +249,7 @@ Kernel kernel = new Kernel(){
 
 kernel.execute(HUGE, 1000);
 ```
+
+[bitonic-sorter-en]: https://en.wikipedia.org/wiki/Bitonic_sorter
+[map-reduce-zhcn]: https://zh.wikipedia.org/wiki/MapReduce
+[map-reduce-en]: https://en.wikipedia.org/wiki/MapReduce
