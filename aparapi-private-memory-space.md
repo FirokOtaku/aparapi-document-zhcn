@@ -1,43 +1,42 @@
-# 私有内存空间
+# 私有缓冲区
 
-> 在 Aparapi 内核中使用私有内存空间
+> 在 Aparapi 内核中使用私有缓冲区
 
 ## 介绍
 
-私有内存空间标识符 (或者说 `private`) 可以限定某个字段中的数据不与其它内核实例共享, 不能被其它内核访问. 对于非数组字段无需声明便是如此; 数组字段必须明确声明才能使其变为私有内存.
+私有权限标识符 `private` 可以限定某个字段中的数据不与其它内核实例共享, 不能被其它内核访问. 对于非数组字段无需声明便是如此; 数组字段必须明确声明才能使其变为私有内存.
 
-The private memory space identifier (just “private” is also recognised) can be applied to struct fields in order to indicate that the data is not shared with/accessible to other kernel instances. Whilst this is the default for non-array data, it must be explicitly applied to array fields in order to make them private. Aparapi now supports arrays in the private memory space.
-
-The private memory space is generally only suitable for smallish arrays, but is required for certain algorithms, e.g. for those which must mutate (for example, sort or partially sort) an exclusive copy of an array/subarray.
+私有缓冲区一般只适合存放小型数组. 对于某些算法来说这是必需的, 例如排序算法必须拷贝一份原数组数据.
 
 ## 细节
 
-In Aparapi there are two mechanisms available to mark a Kernel class member as belonging to the private memory space when mapped to OpenCL code (matching the equivalent functionality for marking items as belonging to the local memory space). Either the field can be named with a suffix plus buffer size, for example
+Aparapi 中提供了两套将内核转换为 OpenCL 代码时标记某个内核字段属于私有缓冲区的机制. 其一, 可以在字段名增加一个缓冲区大小长度:
 
 ```java
 protected short[] myBuffer_$private$32 = new short[32];
 ```
 
-or using the Annotation Kernel.PrivateMemorySpace, for example
+其二, 使用注解 `Kernel.PrivateMemorySpace`:
 
 
 ```java
 protected @PrivateMemorySpace(32) short[] myBuffer = new short[32];
 ```
-The latter should be used in preference to the former.
 
-Note that OpenCL requires that the size of a private array be fixed at compile time for any kernel. Thus it is not possible for a single Kernel subclass to support private buffers of varying size. Unfortunately this may entail creating multiple subclasses with varying buffer sizes in order to most efficiently support varying private buffer sizes.
+应优先使用注解方式.
 
-Of course, a single Kernel class can be created which has a private buffer large enough for all use cases, though this may be suboptimal if only a small fraction of the maximum buffer size is commonly required.
+OpenCL 要求任何内核私有数组大小在编译时就固定下来, 所以单一内核子类不可能支持变长缓冲区. 实际应用时可能需要创建多个缓冲区大小不同的内核子类.
 
-Because private buffers are unshared, they require much more of a GPU’s memory than a local or global buffer of the same size, and should therefore be used sparingly and kept as small as possible, as overuse of large private arrays might cause GPU execution to fail on lower-end graphics cards.
+当然, 创建一个缓冲区特别大的内核子类直接满足各种情况也不是不行.
 
-However, private memory space is the fastest of all OpenCls memory spaces, so may in some limited cases might be used to increase execution speed even when the kernel does not need to modify the array and a shared (local or global) array would suffice - for example to provide a smallish lookup-table to replace an expensive function call.
+由于私有缓冲区不共享, 会比相同容量的局部或全局缓冲区占用更多显存, 应当尽量少用, 用到也应尽量缩小私有缓冲区长度, 否则可能在低端 GPU 上执行出错.
 
-Without modification, an Aparapi kernel which uses private buffers may fail to work when invoked in Java Threadpool (JTP) mode, because the buffer will be shared across multiple threads. However a simple mechanism exists which allows such buffers to be used safely in JTP execution mode.
+然而, 私有缓冲区是所有 OpenCL 内存空间中速度最快的. 即使内核不需要修改缓冲区数据, 使用共享缓冲区就足够了, 也可以使用私有缓冲区来提高运行速度, 比如提供一个小型查找表来代替昂贵的函数调用.
 
-The Kernel.NoCL annotation exists to allow specialised code to be executed when running in Java (or JTP) which is not invoked when running on the GPU. A NoCL method can be inserted at the begining of a Kernel’s run() method which sets the private array to a value obtained from a static ThreadLocal where foo is the primitive type of the array in question. This will have no effect upon OpenCL execution, but will allow threadsafe execution when running in java.
+如果不做修改, 带有私有缓冲区的内核可能在 Java 线程池模式下无法工作, 因为缓冲区会被多个线程共享. 我们为这种情况提供了一个机制, 允许私有缓冲区在 Java 线程池模式下还能继续安全使用.
 
-In the project samples, there is a package com.aparapi.sample.median which gives an example of a median image filter which uses a private array of pixel data to apply a distructive median algorithm to a “window” of local pixels. This sample also demonstrates how to use the ThreadLocal trick to allow correct behaviour when running in JTP execution mode.
+`Kernel.NoCL` 注解用来标记标记某些代码必须在 Java 线程池模式下工作, 在 GPU 运行时不会被调用. 在 `Kernel.run()` 方法上增加 `NoCL` 注解, 将使私有缓冲区变为从 `ThreadLocal` 中获取的数组. 这对 OpenCL 的执行没有影响, 但能保证代码运行于 Java 线程池时安全执行.
+
+在示例项目的 `com.aparapi.sample.median` 包给出了一个中值图像过滤器示例. 它用到一个私有缓冲区储存像素数据, 对本地窗口中的像素使用 "破坏性" 的中值算法. 这个例子还演示了如何使用 `ThreadLocal` 来保证代码运行于非 OpenCL 模式时的正确执行.
 
 http://code.google.com/p/aparapi/source/browse/trunk/samples/median/src/com/amd/aparapi/sample/median/MedianDemo.java

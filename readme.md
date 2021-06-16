@@ -1,9 +1,9 @@
 # Aparapi 文档翻译
 
 ## 声明
-本项目是对 [Aparapi](https://aparapi.com/) 项目官方文档的 **自用** 简中翻译, 不保证翻译质量.
 
-* 本项目使用 ![](https://www.deepl.com/img/logo/deepl-logo-blue.svg) [DeepL](https://www.deepl.com/translator) 辅助翻译
+* 本项目是对 [![](logo-aparapi.png) Aparapi](https://aparapi.com/) 项目官方文档的 **自用非官方** 简中翻译, 不保证翻译质量.
+* 本项目使用 [![](logo-deepl.png) DeepL](https://www.deepl.com/translator) 辅助翻译
 * 本作品采用[知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议](http://creativecommons.org/licenses/by-nc-sa/4.0/)进行许可  
   [ ![](https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png) ](http://creativecommons.org/licenses/by-nc-sa/4.0/)  
   如果您需要在您的项目中使用本项目内容, 请遵循上述协议
@@ -36,14 +36,14 @@
 [Aparapi Patterns](https://aparapi.com/documentation/aparapi-patterns.html)|[Aparapi 示例](aparapi-patterns.md)|✅
 [Choosing Specific Devices](https://aparapi.com/documentation/choosing-specific-devices.html)|[指定运行设备](aparapi-choosing-specific-devices.md)|✅
 [Converting Java to OpenCL](https://aparapi.com/documentation/converting-java-to-opencl.html)|[Java 和 OpenCL 之间的转换](aparapi-converting-java-to-opencl.md)|⏯
-[Emulating Multiple Entrypoints](https://aparapi.com/documentation/emulating-multiple-entrypoints.html)|[模拟多入口](aparapi-emulating-multiple-entrypoints.md)|✅
+[Emulating Multiple Entrypoints](https://aparapi.com/documentation/emulating-multiple-entrypoints.html)|[模拟多程序入口](aparapi-emulating-multiple-entrypoints.md)|✅
 [Explicit Buffer Handling](https://aparapi.com/documentation/explicit-buffer-handling.html)|[手动管理缓冲区](aparapi-explicit-buffer-handling.md)|✅
 [HSA Enabled Lambda](https://aparapi.com/documentation/hsa-enabled-lambda.html)||🕒
 [Kernel Guidelines](https://aparapi.com/documentation/kernel-guidelines.html)|[内核编程指南](aparapi-kernel-guidelines.md)|✅
 [Library Agent Duality](https://aparapi.com/documentation/library-agent-duality.html)|[库/代理二重性](aparapi-library-agent-duality.md)|⏯
 [New Features](https://aparapi.com/documentation/new-features.html)|新特性|🕒
 [OpenCL Bindings](https://aparapi.com/documentation/opencl-bindings.html)|[OpenCL 绑定](aparapi-opencl-bindings.md)|✅
-[Private Memory Space](https://aparapi.com/documentation/private-memory-space.html)|[私有内存空间](aparapi-private-memory-space.md)|▶
+[Private Memory Space](https://aparapi.com/documentation/private-memory-space.html)|[私有缓冲区](aparapi-private-memory-space.md)|✅
 [Profiling the Kernel](https://aparapi.com/documentation/profiling-the-kernel.html)||🕒
 [Setting Up HSA](https://aparapi.com/documentation/setting-up-hsa.html)||🕒
 [Unit Tests](https://aparapi.com/documentation/unit-tests.html)|单元测试|🕒
@@ -56,8 +56,8 @@
 [Lambdas](https://aparapi.com/proposals/lambdas.html)||🕒
 [Address Space with Buffers]()||🕒
 [Extensions](https://aparapi.com/proposals/extensions.html)||🕒
-[Device](https://aparapi.com/proposals/device.html)||🕒
-[Multiple Entry Points](https://aparapi.com/proposals/multiple-entry-points.html)||🕒
+[Device](https://aparapi.com/proposals/device.html)|[选择执行设备](aparapi-device.md)|✅
+[Multiple Entry Points](https://aparapi.com/proposals/multiple-entry-points.html)|[多程序入口](aparapi-multiple-entry-points.md)|▶
 [Lambda Syntax](https://aparapi.com/proposals/lambda-syntax.html)||🕒
 
 ## 译例

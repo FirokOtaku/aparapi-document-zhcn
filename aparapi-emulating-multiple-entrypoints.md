@@ -1,8 +1,8 @@
-# 模拟多入口
+# 模拟多程序入口
 
-> **如何在现有 Aparapi API 基础上模拟多入口**
+> **如何在现有 Aparapi API 基础上模拟多程序入口**
 
-Aparapi 目前不支持多入口, 但是在目前的 API 体系下可以通过一些技巧实现类似功能.
+Aparapi 目前不支持多程序入口, 但是在目前的 API 体系下可以通过一些技巧实现类似功能.
 
 假设我们想创建一个通用的矢量数学运算内核, 提供单数平方, 平方根和二进制加减功能. 受 Aparapi 目前的 API 限制, 我们不能直接对外提供接口. 但是我们可以传递一个单独的参数来决定内核希望执行的 "功能", 从而接近对外提供独立方法.
 
@@ -53,8 +53,7 @@ vk.function = VectorKernel.FUNC_SQRT;
 vk.execute(range);
 ```
 
-这种方法非常普通, 我也已经成功地用这种方法来执行各种管线运算, 比如 FFT. 但这并不是很好的解决方法: 首先 API 会变得很笨拙, 
-This approach is fairly common and I have used it successfully to perform various pipeline stages for calculating FFT’s for example. Whilst this is functional it is not a great solution. First the API is clumsy. We have to mutate the state of the kernel instance and then re-arrange the arrays manually to chain math operations. 当然, 我们可以把这一切封装到工具类和工具方法里, 然后对外提供 `helper.add(lhs,rhs)` 和 `helper.sqrt(lhs,rhs)` 这样的接口. 
+这种方法非常普通, 我也已经成功地用这种方法来执行各种管线运算, 比如 FFT. 但这并不是很好的解决方法: 首先 API 会变得很笨拙, 我们必须手动改变内核的状态, 另外需要手动处理数组链起各种数学运算. 当然, 我们可以把这一切封装到工具类和工具方法里, 然后对外提供 `helper.add(lhs,rhs)` 和 `helper.sqrt(lhs,rhs)` 这样的接口. 
 
 ```java
 class VectorKernel extends Kernel{
