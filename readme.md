@@ -58,7 +58,7 @@
 [Extensions](https://aparapi.com/proposals/extensions.html)||🕒
 [Device](https://aparapi.com/proposals/device.html)|[选择执行设备](aparapi-device.md)|✅
 [Multiple Entry Points](https://aparapi.com/proposals/multiple-entry-points.html)|[多程序入口](aparapi-multiple-entry-points.md)|▶
-[Lambda Syntax](https://aparapi.com/proposals/lambda-syntax.html)||🕒
+[Lambda Syntax](https://aparapi.com/proposals/lambda-syntax.html)|[使用 Lambda 语法](aparapi-lambda-syntax.md)|✅
 
 ## 译例
 
@@ -123,3 +123,32 @@ class Human
 ```
 
 详见 [模拟多入口](aparapi-emulating-multiple-entrypoints.md).
+
+### reduction function and reduction operation - 减项函数和减项操作
+
+reduction function 用于执行 reduction operation.
+
+> [Wikipedia](https://en.wikipedia.org/wiki/Reduction_Operator) 对 `Reduction Operator` 的描述:  
+> In computer science, the reduction operator is a type of operator that is commonly used in parallel programming to reduce the elements of an array into a single result.  
+> Reduction operators are associative and often (but not necessarily) commutative.  
+> The reduction of sets of elements is an integral part of programming models such as Map Reduce, where a reduction operator is applied (mapped) to all elements before they are reduced.  
+> Other parallel algorithms use reduction operators as primary operations to solve more complex problems.  
+> Many reduction operators can be used for broadcasting to distribute data to all processors.
+
+`reduction-operation` 在 Java 中相关的接口为 `java.util.stream.Stream#reduce`.
+
+### commutative style function - 可交换式函数
+
+> [Wiki](https://zh.wikipedia.org/wiki/%E4%BA%A4%E6%8F%9B%E5%BE%8B#.E6.95.B8.E5.AD.B8.E5.AE.9A.E7.BE.A9) 对于 "可交换式运算" 的描述:  
+> 1. 在集合 $ {\displaystyle S} $ 的一二元运算  $ {\displaystyle *} $ 被称之为 "可交换" 的, 若:  
+>   $ {\displaystyle \forall x,y\in S,x*y=y*x} $
+>   一个不满足上述性质的运算则称之为 "不可交换的".
+> 2. 若称 $ {\displaystyle x} $ 在 $ {\displaystyle *} $ 下和 $ {\displaystyle y} $ "可交换", 即表示:  
+>   $ {\displaystyle x*y=y*x}$ 
+> 3. 一二元函数 $ {\displaystyle f:A\times A\to B} $ 被称之为 "可交换" 的, 若:  
+>   $ {\displaystyle \forall x,y\in A,f(x,y)=f(y,x)}. $
+
+对若干元素进行一个操作, 给定元素顺序不同不会影响最终结果的操作, 这个操作就是可交换的.
+
+比如求一堆数字里面的最大值, 无论这些数字顺序如何, 最终结果都是不变的.
+
