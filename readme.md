@@ -48,7 +48,7 @@
 [Setting Up HSA](https://aparapi.com/documentation/setting-up-hsa.html)||🕒
 [Unit Tests](https://aparapi.com/documentation/unit-tests.html)|[单元测试](aparapi-unit-tests.md)|⏯
 [Using HSA Simulator](https://aparapi.com/documentation/using-hsa-simulator.html)|[使用 HSA 模拟器](aparapi-using-hsa-simulator.md)|✅
-[Constant Memory](https://aparapi.com/documentation/constant-memory.html)||🕒
+[Constant Memory](https://aparapi.com/documentation/constant-memory.html)|[常量内存](aparapi-constant-memory.md)|✅
 [Local Memory](https://aparapi.com/documentation/local-memory.html)||🕒
 [Multiple Dim Ranges](https://aparapi.com/documentation/multiple-dim-ranges.html)|多维执行域|🕒
 **Proposals**|**建议**
