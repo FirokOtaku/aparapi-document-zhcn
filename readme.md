@@ -44,10 +44,10 @@
 [New Features](https://aparapi.com/documentation/new-features.html)|新特性|🕒
 [OpenCL Bindings](https://aparapi.com/documentation/opencl-bindings.html)|[OpenCL 绑定](aparapi-opencl-bindings.md)|✅
 [Private Memory Space](https://aparapi.com/documentation/private-memory-space.html)|[私有缓冲区](aparapi-private-memory-space.md)|✅
-[Profiling the Kernel](https://aparapi.com/documentation/profiling-the-kernel.html)||🕒
+[Profiling the Kernel](https://aparapi.com/documentation/profiling-the-kernel.html)|[对内核进行性能分析](aparapi-profiling-the-kernel.md)|✅
 [Setting Up HSA](https://aparapi.com/documentation/setting-up-hsa.html)||🕒
 [Unit Tests](https://aparapi.com/documentation/unit-tests.html)|[单元测试](aparapi-unit-tests.md)|⏯
-[Using HSA Simulator](https://aparapi.com/documentation/using-hsa-simulator.html)||🕒
+[Using HSA Simulator](https://aparapi.com/documentation/using-hsa-simulator.html)|[使用 HSA 模拟器](aparapi-using-hsa-simulator.md)|✅
 [Constant Memory](https://aparapi.com/documentation/constant-memory.html)||🕒
 [Local Memory](https://aparapi.com/documentation/local-memory.html)||🕒
 [Multiple Dim Ranges](https://aparapi.com/documentation/multiple-dim-ranges.html)|多维执行域|🕒
@@ -139,7 +139,7 @@ reduction function 作为 reduction operator, 用于执行 reduction operation.
 
 ### commutative style function - 可交换式函数
 
-> [Wiki](https://zh.wikipedia.org/wiki/%E4%BA%A4%E6%8F%9B%E5%BE%8B#.E6.95.B8.E5.AD.B8.E5.AE.9A.E7.BE.A9) 对于 "可交换式运算" 的描述:  
+> [Wikipedia](https://zh.wikipedia.org/wiki/%E4%BA%A4%E6%8F%9B%E5%BE%8B#.E6.95.B8.E5.AD.B8.E5.AE.9A.E7.BE.A9) 对于 "可交换式运算" 的描述:  
 > 1. 在集合 `S` 的一二元运算  `*` 被称之为 "可交换" 的, 若:  
 >   `∀x,y∈S,x∗y=y∗x`
 >   一个不满足上述性质的运算则称之为 "不可交换的".
@@ -150,5 +150,5 @@ reduction function 作为 reduction operator, 用于执行 reduction operation.
 
 对若干元素进行一个操作, 给定元素顺序不同不会影响最终结果, 这个操作就是可交换的.
 
-比如求一堆数字里面的最大值, 无论这些数字/对数字求最大值的顺序如何如何, 都不会影响最终结果.
+比如求一堆数字里面的最大值, 无论这些数字/对数字求最大值的顺序如何, 都不会影响最终结果.
 
