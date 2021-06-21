@@ -6,7 +6,7 @@
 
 我们理解开发者有时可能不能使用 HSA 设备. HSA 基金会已经开源了一个基于 LLVM 的 HSAIL 仿真器, 我们可以基于此来测试 HSAIL 生成的代码.
 
-此项目基于 [此](https://github.com/HSAFoundation/Okra-Interface-to-HSAIL-Simulator), 但是我们在下面为 Ubuntu 平台提供了详细的下载和构建说明信息.
+本项目基于 [此](https://github.com/HSAFoundation/Okra-Interface-to-HSAIL-Simulator), 下面我们为 Ubuntu 平台提供了详细的下载和构建说明信息.
 
 Aparapi 用户/开发者可以使用这个模拟器进行测试.
 
