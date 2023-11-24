@@ -8,4 +8,7 @@
 
 ## 类似框架
 
-Peter Calvert 的 **java-GPU** 与此项目有类似的目标, 且提供了一套将转换 Java 代码运行至 GPU 上的机制.
+* Peter Calvert 的 **java-GPU** 与此项目目标类似, 且提供了一套将转换 Java 代码运行至 GPU 上的机制
+* Marco Hutter 的面向 Java 的 CUDA 绑定
+* Marco Hutter 的面向 Java 的 OpenCL 绑定
+* Ian Wetherbee 的 Java 加速项目 - 目前基于 C 语言, 运行于原生安卓环境, 计划提供 CUDA 支持

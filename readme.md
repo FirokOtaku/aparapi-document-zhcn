@@ -152,3 +152,8 @@ reduction function 作为 reduction operator, 用于执行 reduction operation.
 
 比如求一堆数字里面的最大值, 无论这些数字/对数字求最大值的顺序如何, 都不会影响最终结果.
 
+### binding 绑定
+
+在一个语言中实现了一套 API, 然后在另一个语言中提供了对这套 API 的完整封装, 这个封装一般叫 binding.
+
+这里直译为 "绑定", 虽然总感觉怪怪的.
